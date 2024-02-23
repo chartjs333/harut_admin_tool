@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="medical@gmail.com" id="create-user-table-changelog-1">
+        <insert tableName="user_details">
+            <column  name="id" value="1" />
+
+            <column name="email"  value="admin@gmail.com" />
+            <column name="username" value="admin" />
+            <column name="password" remarks="password is admin" value="$2a$10$St9KIEn07zP3KsrNnPbBxuZahxvHrzhUFGlHq.Y8wQzSVrm7pZxkm" />
+            <column name="first_name" value="Medical" />
+            <column name="surname" value="Hub" />
+            <column name="user_id" value="admin" />
+
+            <column name="is_active" value="true" />
+            <column name="is_email_verified" value="true" />
+            <column name="is_notified_for_check_list" value="true"/>
+            <column name="is_notified_for_file_upload" value="true" />
+
+            <column name="created_at" value="1663600308000" />
+            <column name="updated_at" value="1663600308000" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

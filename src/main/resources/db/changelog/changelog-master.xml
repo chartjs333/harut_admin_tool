@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <include file="changes/create-user_details-table-changelog-1.xml" relativeToChangelogFile="true"/>
+    <include file="changes/create-excel_files-table-changelog-1.xml" relativeToChangelogFile="true"/>
+    <include file="changes/create-default-user-2.xml" relativeToChangelogFile="true"/>
+    <include file="changes/create-rules-table-changelog-4.xml" relativeToChangelogFile="true"/>
+    <include file="changes/update-add-columns-rules-5.xml" relativeToChangelogFile="true"/>
+    <include file="changes/create-option-table-changelog-6.xml" relativeToChangelogFile="true"/>
+    <include file="changes/create-user_emails-7.xml" relativeToChangelogFile="true"/>
+    <include file="changes/create-favorite_emails-table-changelog-8.xml" relativeToChangelogFile="true"/>
+    <include file="changes/create-customers-table-9.xml" relativeToChangelogFile="true"/>
+    <include file="changes/create-workflow-table-changelog-10.xml" relativeToChangelogFile="true"/>
+    <include file="changes/create-hibernate-sequence-11.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

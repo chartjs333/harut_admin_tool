@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="medical@gmail.com" id="create-customers-table-8">
+        <createTable tableName="customers">
+            <column  name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"  nullable="false"  />
+            </column>
+
+            <column name="name" type="VARCHAR(255)"  />
+            <column name="profile_pic" type="VARCHAR(1024)"  />
+
+            <column name="email" type="VARCHAR(255)" />
+            <column name="phone" type="VARCHAR(1024)" />
+
+            <column name="created_at" type="BIGINT" />
+            <column name="updated_at" type="BIGINT" />
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

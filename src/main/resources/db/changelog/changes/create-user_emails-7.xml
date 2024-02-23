@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="admin@gmail.com" id="create-incoming_mail-table-changelog-1">
+        <createTable tableName="user_emails">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="from" type="VARCHAR(255)"/>
+            <column name="cc" type="JSON"/>
+            <column name="to" type="JSON"/>
+            <column name="reply_to" type="JSON"/>
+            <column name="subject" type="VARCHAR(1024)"/>
+            <column name="message_id" type="VARCHAR(255)"/>
+            <column name="content" type="text"/>
+            <column name="created_at" type="BIGINT"/>
+            <column name="updated_at" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="medical@gmail.com" id="update-add-columns-user_emails-9">
+        <addColumn tableName="user_emails" >
+            <column name="customer_id"  type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="medical@gmail.com" id="update-add-columns-deleted_at">
+        <addColumn tableName="user_emails" >
+            <column name="deleted_at" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="medical@gmail.com" id="update-add-columns-is_favorite">
+        <addColumn tableName="user_emails" >
+            <column name="is_favorite" type="BOOL"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="medical@gmail.com" id="update-add-columns-parent_id">
+        <addColumn tableName="user_emails" >
+            <column name="parent_id" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="medical@gmail.com" id="update-add-columns-sent_at">
+        <addColumn tableName="user_emails" >
+            <column name="sent_at" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="medical@gmail.com" id="update-add-column-mail_status">
+        <addColumn tableName="user_emails" >
+            <column name="mail_status" type="INTEGER"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="medical@gmail.com" id="update-add-column-workflow_id">
+        <addColumn tableName="user_emails" >
+            <column name="workflow_id" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base.html">
+<head>
+    <title>Create Rule</title>
+</head>
+<body>
+
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <h1 class="m-0">Create Rule</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6 card">
+                    <div class="card-body">
+                        <form th:object="${rule}"
+                              name="create-rule"
+                              id="create-rule"
+                              method="POST"
+                              th:action="${#mvc.url('save-rule').build()}">
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="file-type">File Type</label>
+                                        <select th:field="*{fileType}" id="file-type" class="form-control">
+                                            <option  th:each="fileType : ${T(org.medical.hub.models.FileType).values()}"
+                                                     th:value="${fileType.ordinal}"
+                                                     th:text="${fileType.value}"></option>
+                                        </select>
+                                        <p class="text text-danger"
+                                           th:if="${#fields.hasErrors('fileType')}"
+                                           th:errors="*{fileType}"></p>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="rule-type">Rule Type</label>
+                                        <select th:field="*{ruleType}" id="rule-type" class="form-control">
+                                            <option  th:each="ruleType : ${T(org.medical.hub.models.RuleType).values()}"
+                                                     th:value="${ruleType.value}"
+                                                     th:text="${ruleType.name}"></option>
+                                        </select>
+                                        <p class="text text-danger"
+                                           th:if="${#fields.hasErrors('ruleType')}"
+                                           th:errors="*{ruleType}"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="rule-name">Name</label>
+                                        <input th:field="*{name}" type="text" id="rule-name" class="form-control" placeholder="Rule name" />
+                                        <p class="text text-danger"
+                                           th:if="${#fields.hasErrors('name')}"
+                                           th:errors="*{name}"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div id="column-type">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <p class="m-0 font-weight-bold"> I will compare: </p>
+                                            <div th:each="compareBet : ${T(org.medical.hub.models.CompareBetween).values()}" class="form-check p-0" >
+                                                <input th:field="*{compareBetween}"
+                                                       th:id="${compareBet.value} + '-between-column'"
+                                                       th:value="${compareBet.value}"
+                                                       class="column-rule-type"
+                                                       type="radio">
+                                                <label class="form-check-label" th:text="${compareBet.name}" th:for="${compareBet.value} + '-between-column'">Values between Columns</label>
+                                            </div>
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('compareBetween')}"
+                                               th:errors="*{compareBetween}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="first-column">Chose First Column</label>
+                                            <select  style="width:100% !important" th:field="*{firstColumn}" id="first-column" class="form-control">
+                                            </select>
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('firstColumn')}"
+                                               th:errors="*{firstColumn}"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" id="second-column-container">
+                                        <div class="form-group">
+                                            <label  for="second-column">Chose Second Column</label>
+                                            <select style="width:100% !important" th:field="*{secondColumn}" id="second-column" class="form-control">
+                                            </select>
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('secondColumn')}"
+                                               th:errors="*{secondColumn}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="expression-with-parameter">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="expression">Chose expression</label>
+                                            <select th:field="*{expression}" id="expression" class="form-control">
+                                                <option value="" selected>Select expression</option>
+                                                <option th:each="e : ${expression}"
+                                                        th:text="${e.name}"
+                                                        th:value="${e.value}"></option>
+                                            </select>
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('expression')}"
+                                               th:errors="*{expression}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6" id="column-parameter-container">
+                                        <div class="form-group">
+                                            <label>Enter parameter</label>
+                                            <input id="parameterValue" th:field="*{parameterValue}" type="text" class="form-control" placeholder="Enter value...">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('parameterValue')}"
+                                               th:errors="*{parameterValue}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="column-validation-method">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="columnMethodName">Column validation method</label>
+                                            <select th:field="*{columnMethodName}" id="columnMethodName" class="form-control">
+                                                <option value="" selected>Select Method</option>
+                                                <option th:each="method : ${predefinedMethod}"
+                                                        th:text="${method}"
+                                                        th:value="${method}"></option>
+                                            </select>
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('columnMethodName')}"
+                                               th:errors="*{columnMethodName}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="expression">Error Message</label>
+                                            <input th:field="*{errorMessage}" type="text" class="form-control" placeholder="Enter error message">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('errorMessage')}"
+                                               th:errors="*{errorMessage}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="mb-5 mt-5"/>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>Variable Name: </label>
+                                            <input th:field="*{variableName}" type="text" class="form-control" placeholder="Enter value...">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('variableName')}"
+                                               th:errors="*{variableName}"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>Negative value: </label>
+                                            <input th:field="*{negativeValue}" type="number" class="form-control" value="-1" placeholder="Enter value...">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('negativeValue')}"
+                                               th:errors="*{negativeValue}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>Positive value: </label>
+                                            <input th:field="*{positiveValue}" type="number" class="form-control" value="1" placeholder="Enter value...">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('positiveValue')}"
+                                               th:errors="*{positiveValue}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>Undefined value: </label>
+                                            <input th:field="*{undefinedValue}" type="number" class="form-control" value="-99" placeholder="Enter value...">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('undefinedValue')}"
+                                               th:errors="*{undefinedValue}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Message for negative field: </label>
+                                            <input  th:field="*{negativeMessage}" type="text" class="form-control" placeholder="Enter value...">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('negativeMessage')}"
+                                               th:errors="*{negativeMessage}"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Message for undefined field: </label>
+                                            <input th:field="*{undefinedMessage}" type="text" class="form-control" placeholder="Enter value...">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('undefinedMessage')}"
+                                               th:errors="*{undefinedMessage}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="row-type">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="methodName">Method name</label>
+                                            <input id="methodName"  th:field="*{methodName}"  type="text" class="form-control" placeholder="Enter value...">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('methodName')}"
+                                               th:errors="*{methodName}"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="parameter">Enter parameter</label>
+                                            <input id="parameter" th:field="*{parameters}"  type="text" class="form-control" placeholder="Enter value...">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('parameters')}"
+                                               th:errors="*{parameters}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+            var clinicalDataColumn = /*[[${clinicalData}]]*/ '';
+            var sampleManifestColumn = /*[[${sampleManifest}]]*/ '';
+            var factorsPriorColumn = /*[[${factorsPrior}]]*/ '';
+        /*]]>*/
+    </script>
+
+    <th:block layout:fragment="script">
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+        <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css" rel="stylesheet"/>
+        <link th:href="@{/css/select2.css}" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script th:src="@{/plugins/jquery-validation/jquery.validate.min.js}"></script>
+        <script th:src="@{/js/rule.validate.js}"></script>
+    </th:block>
+</body>
+</html>

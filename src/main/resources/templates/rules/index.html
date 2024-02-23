@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base.html">
+<head>
+    <title>Rules</title>
+</head>
+<body>
+
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-6">
+                    <h1 class="display-5 fw-bold">Rules</h1>
+                </div>
+
+                <div class="col-6">
+                    <a th:href="${#mvc.url('create-rule').build()}"
+                       class="btn btn-outline-primary btn-sm float-right"
+                       style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Create Rule</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container-fluid">
+            <div th:replace="layout/alert::alert" th:remove="tag"></div>
+            <div class="row mb-2">
+                <div class="col-12">
+                    <table id="rules" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>S.N</th>
+                                <th>Name</th>
+                                <th>File Type</th>
+                                <th>Rule Type</th>
+                                <th>Created At</th>
+                                <th>Created By</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div th:replace="layout/delete::delete"></div>
+
+    <div class="modal fade" id="viewDetails" tabindex="-1" aria-labelledby="viewDetails" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" >Rule Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="rule-details">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+    <script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+    <script th:src="@{/js/rule.js}"></script>
+    <script th:src="@{/js/modal.delete.js}"></script>
+    <script th:src="@{/js/all.js}"></script>
+</th:block>
+</body>
+</html>

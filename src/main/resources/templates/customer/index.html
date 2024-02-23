@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base.html">
+<head>
+    <title>Customers</title>
+</head>
+<body>
+
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-6">
+                    <h1 class="display-5 fw-bold">Customers</h1>
+                </div>
+
+                <div class="col-6">
+                    <a th:href="${#mvc.url('add-customer').build()}"
+                       class="btn btn-outline-primary btn-sm float-right"
+                       style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Add Customer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container-fluid">
+            <div th:replace="layout/alert::alert" th:remove="tag"></div>
+            <div class="row mb-2">
+                <div class="col-12">
+                    <table id="customer" data-href="/customer/ajax" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>S.N</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="layout/delete::delete"></div>  <!-- Adding the Delete Modal as in the first part -->
+</div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+    <script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+    <script th:src="@{/js/customer.js}"></script>
+    <script th:src="@{/js/modal.delete.js}"></script>  <!-- The js file that handles the delete process-->
+    <script th:src="@{/js/all.js}"></script>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<table class="table">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td th:text="${rule.id}">Id</td>
+        </tr>
+        <tr>
+            <th>Rule Name</th>
+            <td th:text="${rule.name}"></td>
+        </tr>
+        <tr>
+            <th>File Type</th>
+            <td th:text="${rule.fileType.value}"></td>
+        </tr>
+        <tr>
+            <th>Row Type</th>
+            <td th:text="${rule.ruleType.name}"></td>
+        </tr>
+
+        <tr th:if="${rule.ruleType.value == 1}">
+            <th>Method Name</th>
+            <td  th:text="${rule.methodName}"></td>
+        </tr>
+
+        <tr th:if="${rule.ruleType.value == 1}">
+            <th>Parameters</th>
+            <td th:text="${rule.parameters}"></td>
+        </tr>
+
+        <tr th:if="${rule.ruleType.value == 2}">
+            <th>First Column</th>
+            <td th:text="${rule.firstColumn}"></td>
+        </tr>
+
+        <tr th:if="${rule.ruleType.value == 2}">
+            <th>Second Column</th>
+            <td th:text="${rule.secondColumn}"></td>
+        </tr>
+
+        <tr th:if="${rule.ruleType.value == 2}">
+            <th>Expression</th>
+            <td th:text="${rule.expression.name}"></td>
+        </tr>
+
+        <tr th:if="${rule.ruleType.value == 2}">
+            <th>Parameter</th>
+            <td th:text="*{rule.parameter}?: '-'"></td>
+        </tr>
+
+        <tr th:if="${rule.ruleType.value == 2}">
+            <td colspan="2" class="p-0">
+                <table class="table">
+                    <tr>
+                        <th>Variable Name</th>
+                        <th>Negative Value</th>
+                        <th>Positive Value</th>
+                        <th>Undefined Value</th>
+                    </tr>
+                    <tr>
+                        <td th:text="*{rule.variableName} ?: '-'"></td>
+                        <td th:text="*{rule.negativeValue} ?: '-'"></td>
+                        <td th:text="*{rule.positiveValue} ?: '-'"></td>
+                        <td th:text="*{rule.undefinedValue} ?: '-'"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr th:if="${rule.ruleType.value == 2}">
+            <th>Negative Message</th>
+            <td th:text="*{rule.negativeMessage}?: '-'"></td>
+        </tr>
+
+        <tr th:if="${rule.ruleType.value == 2}">
+            <th>Undefined Message</th>
+            <td th:text="*{rule.undefinedMessage}?: '-'"></td>
+        </tr>
+
+    </tbody>
+</table>
+</body>
+</html>
+

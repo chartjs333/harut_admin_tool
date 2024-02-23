@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<body>
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+        <a href="index3.html" class="brand-link">
+            <img src="/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">
+                    <b>Medical Hub</b>
+                </span>
+        </a>
+
+        <div class="sidebar">
+
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                    <li class="nav-item">
+                        <a th:href="${#mvc.url('dashboard').build()}"
+                           th:classappend="${#httpServletRequest.requestURI == '/dashboard' }  ? 'active' : ''"
+                           class="nav-link">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p> Dashboard</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a  th:href="${#mvc.url('upload-file-get').build()}"
+                            th:classappend="${#httpServletRequest.requestURI == '/excel-file' }  ? 'active' : ''"
+                            class="nav-link">
+                            <i class="nav-icon fa fa-file-excel"></i>
+                            <p>Excel Files</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a  th:href="${#mvc.url('eCRF-get').build()}"
+                            th:classappend="${#httpServletRequest.requestURI == '/eCRF' }  ? 'active' : ''"
+                            class="nav-link">
+                            <i class="nav-icon fa fa-clipboard"></i>
+                            <p>eCRFs</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a  th:href="${#mvc.url('eCRF-report-get').build()}"
+                            th:classappend="${#httpServletRequest.requestURI == '/eCRF-report' }  ? 'active' : ''"
+                            class="nav-link">
+                            <i class="nav-icon fa fa-clipboard" aria-hidden="true"></i>
+                            <p>eCRF Report</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a  th:href="${#mvc.url('get-email-templates').build()}"
+                            th:classappend="${#httpServletRequest.requestURI == '/email-templates' }  ? 'active' : ''"
+                            class="nav-link">
+                            <i class="nav-icon fas fa-columns" aria-hidden="true"></i>
+                            <p>Email Template</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a  th:href="${#mvc.url('create-spam-content').build()}"
+                            th:classappend="${#httpServletRequest.requestURI == '/option/spam' }  ? 'active' : ''"
+                            class="nav-link">
+                            <i class="nav-icon fas fa-exclamation-triangle " aria-hidden="true"></i>
+                            <p>Spam Content</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a  th:href="${#mvc.url('get-rules').build()}"
+                            th:classappend="${(#httpServletRequest.requestURI == '/rules') || #httpServletRequest.requestURI == '/rules/create' }  ? 'active' : ''"
+                            class="nav-link">
+                            <i class="nav-icon fa fa-list-alt"></i>
+                            <p>Rules</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a  th:href="${#mvc.url('get-customers').build()}"
+                            th:classappend="${(#httpServletRequest.requestURI == '/customer') || #httpServletRequest.requestURI == '/workflow/*' }  ? 'active' : ''"
+                            class="nav-link">
+                            <i class="nav-icon fas fa-people-arrows"></i>
+                            <p>Customer</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a  th:href="${#mvc.url('get-workflow').build()}"
+                            th:classappend="${(#httpServletRequest.requestURI == '/workflow') || #httpServletRequest.requestURI == '/workflow/*' }  ? 'active' : ''"
+                            class="nav-link">
+                            <i class="nav-icon fa fa-list-alt"></i>
+                            <p>Workflow</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item" th:classappend="${#httpServletRequest.requestURI == '/mail' OR #httpServletRequest.requestURI == '/mail/trash' }  ? 'menu-open' : ''">
+                        <a href="#" class="nav-link"
+                           th:classappend="${#httpServletRequest.requestURI == '/mail' OR #httpServletRequest.requestURI == '/mail/trash' }  ? 'active' : ''">
+                            <i class="nav-icon far fa-envelope"></i>
+                            <p>
+                                Mailbox
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview sideborder position-relative">
+                            <li class="nav-item position-relative"
+                                th:classappend="${#httpServletRequest.requestURI == '/mail' }  ? 'active' : ''">
+                                <a  th:href="${#mvc.url('get-emails').build()}" class="nav-link">
+                                    <p>Inbox</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item position-relative"
+                                th:classappend="${#httpServletRequest.requestURI == '/mail/trash' }  ? 'active' : ''">
+                                <a  th:href="${#mvc.url('trash-emails').build()}" class="nav-link">
+                                    <p>Trash</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </aside>
+</body>
+</html>

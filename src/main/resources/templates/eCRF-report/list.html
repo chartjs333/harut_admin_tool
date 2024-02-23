@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base.html">
+<head>
+    <title>eCRF Report</title>
+</head>
+<body>
+
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h1 class="display-5 fw-bold">eCRF Report</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div th:if="${success_message}" th:text="${success_message}" class="alert alert-success"></div>
+                    <div th:if="${error_message}" th:text="${error_message}" class="alert alert-danger"></div>
+                </div>
+
+                <div class="col-12 mb-2">
+                    <div class="d-flex ">
+                        <div class="mr-2">
+                            <div class="form-inline ml-auto">
+                                <div class="form-group">
+
+                                    <select multiple id="multiple-pat-id"  style="width:270px;">
+                                        <option th:unless="${#lists.isEmpty(patIds)}"
+                                                th:each="patId: ${patIds}"
+                                                th:value="${patId}"
+                                                th:text="${patId}"
+                                        ></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mr-2">
+                            <div class="form-inline ml-auto">
+                                <div class="form-group">
+
+                                    <select multiple id="userIds" style="width:270px;">
+                                        <option></option>
+                                        <option th:unless="${#lists.isEmpty(users)}"
+                                                th:each="user: ${users}"
+                                                th:value="${user.id}"
+                                                th:text="${user.firstName}+' '+${user.surname}"
+                                        ></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ml-1">
+                            <button class="btn btn-success mr-2"
+                                    id="assign-eCRF"
+                                    data-href="/eCRF-report/assign"
+                                    data-toggle="modal"
+                                    data-target="#assignModal"
+                                    disabled
+                            >Assign</button>
+
+                            <button class="btn btn-danger "
+                                    id="delete-eCRF"
+                                    data-href="/eCRF-report/delete"
+                                    data-toggle="modal"
+                                    data-target="#deleteModaleCRF"
+                                    data-message="Are you sure you want to delete the selected eCRF ?"
+                                    disabled
+                            >Delete </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <table id="ecrf-grid" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th data-orderable="false"><input type="checkbox" id="select-all-eCRF"/></th>
+                            <th>ID</th>
+                            <th>Pat Id</th>
+                            <th>Filling Status</th>
+                            <th>Created At</th>
+                            <th>Sender(name, Location)</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="deleteModaleCRF" tabindex="-1" aria-labelledby="deleteModaleCRF" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="message"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger btn-ok">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Assign</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="assignTo">eCRF Assign To</label>
+                    <select id="assignTo" class="custom-select custom-select-sm">
+                        <option value="" selected>Select User</option>
+                        <option th:unless="${#lists.isEmpty(users)}"
+                                th:each="user: ${users}"
+                                th:value="${user.id}"
+                                th:text="${user.firstName}+' '+${user.surname}"
+                        ></option>
+                    </select>
+                    <small id="invalid-assigned-to" class="form-text text-muted"></small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success btn-ok">Assign</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<th:block layout:fragment="script">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css" rel="stylesheet"/>
+    <link th:href="@{/css/select2.css}" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+    <script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+    <script th:src="@{/js/eCRF-report.js}"></script>
+    <script th:src="@{/js/all.js}"></script>
+</th:block>
+</body>
+</html>

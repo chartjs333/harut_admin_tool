@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base.html">
+<head>
+    <title>Create Workflow Mail</title>
+</head>
+<body>
+
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <h1 class="m-0">Workflow Mail</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 card">
+                    <div class="card-header">
+                        <h3 class="card-title">Compose Mail</h3>
+                    </div>
+                    <div class="card-body">
+                        <form th:object="${workflowEmail}"
+                              name="create-workflow-email"
+                              id="create-workflow-email"
+                              method="POST"
+                              th:action="${action}" >
+
+                            <div id="row-type">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="description">Subject</label>
+                                            <input id="description"  th:field="*{subject}"  type="text" class="form-control form-control-sm" placeholder="Subject">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('subject')}"
+                                               th:errors="*{subject}"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="emailContent">Mail Content</label>
+                                            <textarea th:field="*{emailContent}" id="emailContent"> </textarea>
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('emailContent')}"
+                                               th:errors="*{emailContent}"></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label>Date and time:</label>
+                                            <div class="input-group date" id="sentAt" data-target-input="nearest">
+                                                <input th:field="*{sentAt}" type="text" class="form-control datetimepicker-input" data-target="#sentAt"/>
+                                                <div class="input-group-append" data-target="#sentAt" data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+</div>
+    <th:block layout:fragment="script">
+        <link rel="stylesheet" th:href="@{/plugins/summernote/summernote-bs4.min.css}">
+        <script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+        <script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+
+        <script th:src="@{/plugins/moment/moment.min.js}"></script>
+        <link rel="stylesheet" th:href="@{/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css}">
+        <script th:src="@{/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js}"></script>
+        <script th:inline="javascript">
+
+            $(document).ready(function(){
+                $('#emailContent').summernote({
+                    placeholder: 'Write Email here',
+                    tabsize: 2,
+                    height: 300
+                });
+
+                $('#sentAt').datetimepicker({ icons: { time: 'far fa-clock' } });
+            });
+        </script>
+    </th:block>
+</body>
+</html>

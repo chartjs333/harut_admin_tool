@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base.html">
+<head>
+    <title>Add Correspondent</title>
+</head>
+<body>
+
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <h1 class="m-0">Add Correspondent</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-6 card">
+                    <div class="card-body">
+                        <form th:object="${customer}"
+                              name="create-customer"
+                              id="create-customer"
+                              method="POST"
+                              th:action="${action}">
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="name">Name</label>
+                                        <input  th:field="*{name}"  type="text" id="name" class="form-control" placeholder="Customer Name" />
+                                        <p class="text text-danger"
+                                           th:if="${#fields.hasErrors('name')}"
+                                           th:errors="*{name}"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input  th:field="*{email}"  type="text" id="email" class="form-control" placeholder="Email" />
+                                        <p class="text text-danger"
+                                           th:if="${#fields.hasErrors('email')}"
+                                           th:errors="*{email}"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="row-type">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="phone">Phone</label>
+                                            <input id="phone"   th:field="*{phone}" type="text" class="form-control" placeholder="Phone Number">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

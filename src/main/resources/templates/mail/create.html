@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base.html">
+<head>
+    <title>Create Mail</title>
+</head>
+<body>
+
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <h1 class="m-0">Email form</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 card">
+                    <div class="card-header">
+                        <h3 class="card-title">Compose New Message</h3>
+                    </div>
+                    <div class="card-body">
+                        <form th:object="${emailTemplate}"
+                              name="create-email-template"
+                              id="create-email-template"
+                              method="POST"
+                              th:action="@{/{id}/send-email(id=${mailDetails.id})}" >
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="rule-name">To Whom</label>
+                                        <input th:field="*{to}" type="text" id="rule-name" class="form-control form-control-sm" placeholder="Email Address" />
+                                        <p class="text text-danger"
+                                           th:if="${#fields.hasErrors('to')}"
+                                           th:errors="*{to}"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="row-type">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="description">Subject</label>
+                                            <input id="description"  th:field="*{subject}"  type="text" class="form-control form-control-sm" placeholder="Subject">
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('subject')}"
+                                               th:errors="*{subject}"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="emailContent">Mail Content</label>
+                                            <textarea th:field="*{emailContent}" id="emailContent"> </textarea>
+                                            <p class="text text-danger"
+                                               th:if="${#fields.hasErrors('emailContent')}"
+                                               th:errors="*{emailContent}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <script th:inline="javascript">
+
+        $(document).ready(function(){
+            $('#emailContent').summernote({
+                placeholder: 'Write Email here',
+                tabsize: 2,
+                height: 300
+            })
+        });
+    </script>
+
+    <th:block layout:fragment="script">
+        <link rel="stylesheet" th:href="@{/plugins/summernote/summernote-bs4.min.css}">
+        <script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+    </th:block>
+</body>
+</html>

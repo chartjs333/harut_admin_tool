@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="medical@gmail.com" id="create-user-table-changelog-1">
+        <createTable tableName="user_details">
+            <column  name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"  nullable="false"  />
+            </column>
+
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="user_details_email_ix1"/>
+            </column>
+            <column name="username" type="VARCHAR(255)" >
+                <constraints nullable="false" unique="true" uniqueConstraintName="user_details_username_ix1"/>
+            </column>
+            <column name="password" type="VARCHAR(255)" />
+            <column name="first_name" type="VARCHAR(255)" />
+            <column name="surname" type="VARCHAR(255)" />
+
+            <column name="user_id" type="VARCHAR(255)" >
+                <constraints nullable="false" unique="true" uniqueConstraintName="user_details_user_id_ix1"/>
+            </column>
+
+            <column name="email_verification_token" type="BIGINT" />
+            <column name="activation_code" type="VARCHAR(255)">
+                <constraints nullable="true" unique="true" uniqueConstraintName="user_details_activation_code_ix1"/>
+            </column>
+
+            <column name="city" type="VARCHAR(255)" />
+            <column name="country" type="VARCHAR(255)" />
+            <column name="department" type="VARCHAR(255)" />
+            <column name="institution" type="VARCHAR(255)" />
+
+            <column name="is_active" type="BOOLEAN" />
+            <column name="is_email_verified" type="BOOLEAN" />
+            <column name="is_notified_for_check_list" type="BOOLEAN" />
+            <column name="is_notified_for_file_upload" type="BOOLEAN" />
+
+            <column name="created_at" type="BIGINT" />
+            <column name="updated_at" type="BIGINT" />
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base.html">
+<head>
+    <title>Update Excel Files</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h1 class="display-5 fw-bold">Update excel details</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content" id="content-container">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div id="message-el"></div>
+                    <form id="excel-form"
+                          name="upload-excel"
+                          method="POST"
+                          th:action="@{/upload/excel-file/{id}(id=${id})}"></form>
+
+                    <form id="download-excel-file"
+                          name="download-excel"
+                          method="POST"
+                          th:action="@{/excel-file/{id}/export(id=${id})}"></form>
+
+                    <div class="mb-3">
+
+                        <button
+                                class="btn btn-dark btn-sm"
+                                id="save-changes"
+                                data-title="Create Excel file" data-toggle="modal"
+                                data-target="#createModal"
+                                data-message="Are you sure you want to save the excel file details?"
+                                data-method="create"
+                        >Save Changes
+                        </button>
+                        <a
+                                th:data-href="@{/excel-file/{id}/export(id=${id})}"
+                                id="export-file"
+                                type="button"
+                                class="btn btn-success btn-sm"
+                                th:data-token="${_csrf.token}"
+                                th:data-parameter-name="${_csrf.parameterName}"
+                        > Export Excel </a>
+                        <button
+                                class="btn btn-danger btn-sm"
+                                id="save-and-overwrite-changes"
+                                data-title="Overwrite Excel file" data-toggle="modal"
+                                data-target="#overWriteModal"
+                                data-message="Do you want to overwrite it? If so, all data from the file you overwrite will be replaced by this file."
+                                data-method="create"
+                        >Save and Overwrite
+                        </button>
+
+                        <button class="btn btn-light btn-sm"
+                                data-title="Overwrite Excel file" data-toggle="modal"
+                                data-target="#errorMessageModal"
+                                data-message="Do you want to overwrite it? If so, all data from the file you overwrite will be replaced by this file."
+                                data-method="create"
+                                id="total-error"></button>
+                    </div>
+                    <div id="spreadsheet"></div>
+                    <p id="validation-url" th:data-href="@{/excel-file/{id}/validate-data(id=${id})}"></p>
+                    <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+                        Right-click on the Excel sheet area and select the appropriate option to add a new row.
+                    </p>
+                    <p class="text-muted well well-sm shadow-none" style="margin-top: 0px;">
+                        To add a new column, click on the column header and pick the relevant available option.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Create File</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="message"></div>
+                    <div class="form-group">
+                        <label for="file-name">File Name</label>
+                        <input type="email" class="form-control" id="file-name" aria-describedby="nameHelp"
+                               placeholder="File Name">
+                        <p class="text text-danger" id="invalid-name"></p>
+                        <small id="nameHelp" class="form-text text-muted">Name of the file to create</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary btn-ok">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exportToECRFsModal" tabindex="-1" aria-labelledby="exportToECRFsModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportToECRFsModalLabel">Export to eCRFs</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="exportToECRFsModalMessage"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary btn-ok">Export</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="overWriteModal" tabindex="-1" aria-labelledby="overWriteModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="overWriteModalLabel">Create File</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="overWriteModalMessage" ></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary btn-ok">Overwrite</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="errorMessageModal" tabindex="-1" aria-labelledby="overWriteModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorMessageModalTitle">Error Messages</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="message-list" style="height:200px;overflow-y:auto;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+            var data = /*[[${data}]]*/ "";
+            var cols = /*[[${cols}]]*/ "";
+            var values = /*[[${values}]]*/ "";
+
+            var width = document.getElementById("content-container").clientWidth;
+            var finalWidth = width -50 ;
+
+            let height = $(".content-wrapper").height();
+            let finalHeight = height - 180;
+
+            var excelChange = false;
+            var changed = function(instance, cell, x, y, value) {
+                excelChange = true;
+            }
+
+            window.onbeforeunload = askConfirm;
+            function askConfirm(){
+                if(excelChange){
+                    return "Are you sure you want to leave ?";
+                }
+            }
+            var onExcelDataChange = function(instance, cell, x, y, value) {
+                var cellName = jexcel.getColumnNameFromId([x,y]);
+
+                const formData = new FormData(excelForm);
+                formData.append("cellReference", cellName);
+                formData.append("data", value);
+                formData.append("rowData",  JSON.stringify(excelData.getRowData(y)));
+
+                $.ajax({
+                    type : "POST",
+                    url: $("#validation-url").data("href"),
+                    data : formData,
+                    processData: false,
+                    contentType: false,
+                    cache:false,
+                    success: function(response){
+                        if(response.isValid == "false"){
+
+                            let style = {[cellName]:"background-color:"+response.backgroundColor};
+                            excelData.setStyle(style);
+                            for(let i=0; i<values.length; i++){
+                                const row = values[i];
+                                for(let j=0; j<row.length; j++){
+                                    if(row[j]['cellReference'] == cellName ){
+                                         values[i][j]['message'] = response.message;
+                                         values[i][j]['style'] = "background-color:"+response.backgroundColor;
+                                    }
+                                }
+                            }
+                        }else{
+                            for(let i=0; i<values.length; i++){
+                                const row = values[i];
+                                for(let j=0; j<row.length; j++){
+                                    if(row[j]['cellReference'] == cellName ){
+                                         values[i][j]['message'] = "";
+                                    }
+                                }
+                            }
+                            let style = {[cellName]:"background-color:white"};
+                            excelData.setStyle(style);
+                        }
+                        findTotalErrors(values);
+                    },
+
+                    error: function(error){
+
+                    }
+                });
+            }
+
+            var onBlur = function(instance) {
+                const elements = document.getElementsByClassName("tooltip");
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+            }
+
+            var selectionActive = function(instance,  x1, y1, x2, y2, origin) {
+                let cellReference = jexcel.getColumnNameFromId([x1, y1]);
+                let cellReference1 = jexcel.getColumnNameFromId([x2, y2]);
+
+                const elements = document.getElementsByClassName("tooltip");
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+                let tooltipContainer = document.createElement("div");
+                tooltipContainer.classList.add("tooltip");
+
+                var padding = 5;
+                var linkProps = instance.jexcel.getCellFromCoords(x1,y1).getBoundingClientRect();
+                var tooltipProps = tooltipContainer.getBoundingClientRect();
+                var topPos = linkProps.top - (tooltipProps.height + padding) - 26;
+                tooltipContainer.setAttribute('style','top:'+topPos+'px;'+'left:'+linkProps.left+'px;opacity:1');
+                let message = "";
+                if(cellReference != cellReference1){
+                    console.log(cellReference != cellReference1);
+                    let firstCell = cellReference.charAt(cellReference.length - 1);
+                    let secondCell = cellReference1.charAt(cellReference1.length - 1);
+                    let row = values[firstCell];
+                    message = row[0]['message'] ;
+                }else{
+                    for(let i=0; i<values.length; i++){
+                        const row = values[i];
+                        for(let j=0; j<row.length; j++){
+
+                            if(row[j]['cellReference'] && row[j]['cellReference'] == cellReference && row[j]['message'] && row[j]['style'] ){
+                                message = row[j]['message'] ;
+                            }
+                        }
+                    }
+                }
+
+
+
+                if(message){
+                    tooltipContainer.appendChild(document.createTextNode(message));
+                    document.body.appendChild(tooltipContainer);
+                }
+            }
+
+            var excelData = jspreadsheet(document.getElementById('spreadsheet'), {
+                minDimensions:[10,20],
+                data: data,
+                defaultColWidth: 150,
+                tableOverflow: true,
+                columns: cols,
+                tableWidth: finalWidth+"px",
+                tableHeight:finalHeight+"px",
+                oneditionstart	: changed,
+                onchange: onExcelDataChange,
+                onselection: selectionActive,
+                onblur: onBlur,
+            });
+
+            $(document).ready(function(){
+                for(let i=0; i<values.length; i++){
+                    const row = values[i];
+                    for(let j=0; j<row.length; j++){
+                        if(row[j]['cellReference'] != "" && row[j]['cellReference'] != null && row[j]['style'] != "" && row[j]['style'] != null){
+                            let style = {[row[j]['cellReference']]: row[j]['style']};
+                            excelData.setStyle(style);
+                        }
+                    }
+                }
+
+                findTotalErrors(values);
+            });
+            $("#export-file").click(function(e){
+                e.preventDefault();
+                window.onbeforeunload = null;
+                var form =$('<form>', {
+                            'method': 'POST',
+                            'action': $(this).data('href')
+                        });
+
+                var data =$('<input>', {
+                            'type': 'hidden',
+                            'name': "data",
+                            'value': JSON.stringify(excelData.getData())
+                        });
+
+                var columns =$('<input>', {
+                        'type': 'hidden',
+                        'name': "columns",
+                        'value': JSON.stringify(excelData.getConfig().columns)
+                    });
+
+                var exportToken =$('<input>', {
+                                'type': 'hidden',
+                                'name': $(this).data('parameter-name'),
+                                'value': $(this).data('token')
+                            });
+
+                form.append(columns, data, exportToken).appendTo('body');
+                form.submit();
+                window.onbeforeunload = askConfirm;
+            });
+
+            const excelForm = document.getElementById("excel-form");
+            const subscribe = (formData) =>{
+                try {
+
+                    $.ajax({
+                        type : "POST",
+                        url: excelForm.getAttribute('action'),
+                        data : formData,
+                        processData: false,
+                        contentType: false,
+                        cache:false,
+                        success: function(response){
+                            $('.modal').modal('hide');
+                            excelChange = false;
+                            window.onbeforeunload = null;
+                            showMessage(response.success_message, 'primary');
+                        },
+
+                        error: function(error){
+                            $('.modal').modal('hide');
+                            excelChange = false;
+                            window.onbeforeunload = null;
+                            showMessage(error.message, 'danger');
+                        }
+                    });
+
+                } catch (error) {
+                    showMessage(error.message, 'danger');
+                }
+            }
+
+            var messageEl = document.getElementById("message-el");
+            const showMessage = (message, type = 'primary') => {
+                messageEl.innerHTML = `
+                    <div class="alert alert-dismissible fade show alert-${type}">
+                        <span>${message}</span>
+                        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+            };
+
+             $('#createModal').on('show.bs.modal', function(e) {
+                var title = $(e.relatedTarget).data('title');
+                if (title != undefined)
+                    $(this).find('.modal-title').html(title);
+
+                var message = $(e.relatedTarget).data('message');
+                if (message != undefined)
+                    $(this).find('.modal-body #message').html(message);
+
+                $(this).find('.modal-footer .btn-ok').on('click', function () {
+                    e.preventDefault();
+
+                    let fileName = document.getElementById("file-name").value;
+                    if(fileName){
+                        const formData = new FormData(excelForm);
+                        formData.append("data", JSON.stringify(excelData.getData()));
+                        formData.append("buttonAction", "1");
+                        formData.append("fileName", fileName);
+                        formData.append("columns", JSON.stringify(excelData.getConfig().columns));
+                        $("#invalid-name").text("");
+                        subscribe(formData);
+                    }else{
+                        $("#invalid-name").text("File name is required.");
+                    }
+                });
+            });
+
+            $('#overWriteModal').on('show.bs.modal', function(e) {
+                var title = $(e.relatedTarget).data('title');
+                if (title != undefined)
+                    $(this).find('.modal-title').html(title);
+
+                var message = $(e.relatedTarget).data('message');
+                if (message != undefined)
+                    $(this).find('.modal-body #overWriteModalMessage').html(message);
+
+                $(this).find('.modal-footer .btn-ok').on('click', function () {
+                    e.preventDefault();
+                    const formData = new FormData(excelForm);
+                    formData.append("data", JSON.stringify(excelData.getData()));
+                    formData.append("buttonAction", "2");
+                    formData.append("columns", JSON.stringify(excelData.getConfig().columns));
+                    subscribe(formData);
+                });
+            });
+
+    </script>
+    <script th:src="@{/js/excel-update.js}"></script>
+</th:block>
+
+</body>
+</html>

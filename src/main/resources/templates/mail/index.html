@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base.html">
+<head>
+    <title>Mail</title>
+</head>
+<body>
+
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="display-5 fw-bold m-0">Mail</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="layout/alert::alert"></div>
+    <section class="content">
+        <div class="card card-solid">
+            <div class="card-body pb-0">
+                <div class="form-inline ml-auto">
+                    <div class="form-group">
+
+                        <select id="select-status" class="custom-select custom-select-sm" style="width:170px;display:hidden;">
+                            <option  th:each="mailStatus : ${T(org.medical.hub.mail.MailStatus).values()}"
+                                     th:value="${mailStatus.value}"
+                                     th:text="${mailStatus.name}"></option>
+                        </select>
+                    </div>
+                </div>
+                <table id="mail-list" class="table table-stripped col-12">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="select-all-eCRF"/></th>
+                            <th></th>
+                            <th>Status</th>
+                            <th>Subject</th>
+                            <th>Correspondents</th>
+                            <th>Date and time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div th:replace="layout/delete::delete"></div>
+
+        <div   class="modal fade" id="create-email" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Create an email</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="message">Do you want to use existing workflow? </div>
+                    </div>
+                    <div class="modal-footer" style="justify-content:center">
+                        <a href="/mail/54/workflow" class="btn btn-secondary" id="create-workflow">Create Workflow</a>
+                        <a href="/mail/54/email-templates" class="btn btn-primary btn-ok" id="use-existing">Use existing workflow</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <th:block layout:fragment="script">
+        <script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+        <script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+        <script th:src="@{/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+        <script th:src="@{/js/mail.js}"></script>
+        <script th:src="@{/js/modal.delete.js}"></script>
+        <script th:src="@{/js/all.js}"></script>
+    </th:block>
+</body>
+</html>

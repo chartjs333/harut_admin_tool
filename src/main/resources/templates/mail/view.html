@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base.html">
+<head>
+    <title>Mail Detail</title>
+</head>
+<body>
+
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="display-5 fw-bold m-0">Mail</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="card-body p-0">
+            <div class="mailbox-read-info">
+                <h5 th:text="${mail.subject}"></h5>
+                <h6>
+                    <span th:text="${mail.from}"></span>
+                    <span class="mailbox-read-time float-right">15 Feb. 2015 11:03 PM</span>
+                </h6>
+            </div>
+
+            <div class="mailbox-controls with-border text-center">
+                <div class="btn-group">
+                    <a href="#" class="mr-2">
+                        <i class="fas fa-star" aria-hidden="true" ></i>
+                    </a>
+                    <a href="#" class="btn btn-sm btn-success mr-2"
+                       data-toggle="modal"
+                       data-target="#create-email">
+                        Answer
+                    </a>
+                    <a href="#" class="text-danger"
+                       data-title="Delete Mail" data-toggle="modal"
+                       data-target="#deleteModal"
+                       data-message="Are you sure you want to move mail to trash ?"
+                       data-method="delete"
+                       data-href="${action.url}"
+                       th:data-href="@{/mail/{id}/delete(id=${mail.id})}">
+                        <i class="nav-icon fas fa-trash"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mailbox-read-message">
+                 <p th:utext="${mail.content}"></p>
+            </div>
+
+        </div>
+
+        <div th:replace="layout/delete::delete"></div>
+        <div class="modal fade" id="create-email" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Create an email</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="message">Do you want to use a template for your email?</div>
+                    </div>
+                    <div class="modal-footer" style="justify-content:center">
+                        <a th:href="@{/mail/{id}/create(id=${mail.id})}"  class="btn btn-secondary" >Create an email without a template</a>
+                        <a th:href="@{/mail/{id}/email-templates(id=${mail.id})}" class="btn btn-primary btn-ok">Use a template</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <th:block layout:fragment="script">
+
+        <script th:src="@{/js/modal.delete.js}"></script>
+        <script th:src="@{/js/all.js}"></script>
+    </th:block>
+
+</body>
+</html>

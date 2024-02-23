@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/base.html">
+<head>
+    <title>Excel Files</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <h1 class="display-5 fw-bold">Excel Files</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 mb-5">
+                    <h6>Download templates</h6>
+
+                    <a th:href="${#mvc.url('download-clinical-template').build()}" type="button"
+                       class="btn btn-primary mr-2"
+                       style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                        Download Clinical template
+                    </a>
+
+                    <a th:href="${#mvc.url('download-manifest-template').build()}" type="button"
+                       class="btn btn-primary mr-2"
+                       style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                        Download Sample Manifest template
+                    </a>
+
+                    <a th:href="${#mvc.url('download-factors-prior-template').build()}" type="button"
+                       class="btn btn-primary"
+                       style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                        Download Factors Prior to PD
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12  mb-5">
+                    <h6>Upload files</h6>
+                    <a th:href="${#mvc.url('upload-clinical-excel-file').build()}"
+                       type="button"
+                       class="btn btn-primary mr-2"
+                       style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                        Upload Clinical Data file
+                    </a>
+
+                    <a th:href="${#mvc.url('upload-manifest-excel-file').build()}"
+                       type="button"
+                       class="btn btn-primary mr-2"
+                       style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                        Upload Manifest file
+                    </a>
+
+                    <a th:href="${#mvc.url('upload-factors-prior-to-pd').build()}"
+                       type="button"
+                       class="btn btn-primary"
+                       style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                        Upload Factors Prior to PD
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 mb-1">
+                    <div th:if="${success_message}" class="alert alert-success alert-dismissible fade show"
+                         role="alert">
+                        <span th:text="${success_message}"></span>
+                        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div th:if="${error_message}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span th:text="${error_message}"></span>
+                        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div th:unless="${#lists.isEmpty(errorsToShow)}"
+                         class="alert alert-danger fade show" role="alert">
+                        <div th:each="error: ${errorsToShow}">
+                            <span th:text="${error}" ></span>
+                        </div>
+
+                        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+
+                <div class="col-12  mb-5">
+                    <h3>List of files</h3>
+                    <table class="table table-hover">
+                        <tr>
+                            <th>ID</th>
+                            <th>File name</th>
+                            <th>Type of</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr th:unless="${#lists.isEmpty(excelFiles)}" th:each="excelFile: ${excelFiles}">
+                            <td th:text="${excelFile.id}">1</td>
+                            <td th:text="${excelFile.fileName}"></td>
+                            <td>
+                                <b th:text="${excelFile.typeOf.value}"></b>
+                            </td>
+                            <td>
+                                <span th:if="${excelFile.status.value == 'In Progress'}"
+                                      th:text="${excelFile.status.value}" class="badge badge-primary"></span>
+                                <span th:if="${excelFile.status.value == 'Approved'}"
+                                      th:text="${excelFile.status.value}" class="badge badge-success"></span>
+                                <span th:if="${excelFile.status.value == 'Submitted'}"
+                                      th:text="${excelFile.status.value}" class="badge badge-info"></span>
+                            </td>
+                            <td th:text="${#dates.format(excelFile.createdAt, 'dd-MM-yyyy')}"></td>
+                            <td>
+                                <a class="minimal-excel btn btn-primary btn-sm"
+                                   th:classappend="${excelFile.status.value == 'Submitted'} ? disabled : ''"
+                                   th:data-minimal-token="${_csrf.token}"
+                                   th:data-minimal-parameter-name="${_csrf.parameterName}"
+                                   data-toggle="modal"
+                                   data-target="#assignModal"
+                                   th:data-file-type ="${excelFile.typeOf}"
+                                   th:data-href="@{/uploadMinimalExcel/{id}/generate-eCRF(id=${excelFile.id})}"
+                                >
+                                    Export to eCRF
+                                </a>
+                                <a th:href="@{/excel-file/{id}/download(id=${excelFile.id})}"
+                                   class="btn btn-secondary mr-2 btn-sm">
+                                    <i class="fa fa-download" aria-hidden="true"></i>
+                                    Download
+                                </a>
+
+                                <a th:href="@{/upload/excel-file/{id}(id=${excelFile.id})}" type="button"
+                                   class="btn btn-success btn-sm  mr-2">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Edit
+                                </a>
+
+                                <a data-title="Delete Excel file" data-toggle="modal"
+                                   data-target="#deleteModal" class="btn btn-danger btn-sm"
+                                   data-message="Are you sure you want to delete the excel file?"
+                                   data-method="delete"
+                                   th:data-href="@{/excel-file/{id}/delete(id=${excelFile.id})}"
+                                   th:data-delete-token="${_csrf.token}"
+                                   th:data-delete-parameter-name="${_csrf.parameterName}">
+                                    <i class="fas fa-trash"></i>
+                                    Delete
+                                </a>
+
+
+                            </td>
+
+                        </tr>
+                    </table>
+
+                    <nav th:unless="${#lists.isEmpty(excelFiles)}" aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled':''}">
+                                <a th:href="@{/excel-file(page=${currentPage-1})}" class="page-link"
+                                   aria-label="Previous"
+                                   th:aria-disabled="${currentPage == 1 ? 'true':'false'}">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+
+                            <li th:each="i : ${#numbers.sequence(1, __${totalPage}__)}" class="page-item "
+                                th:classappend="${__${i}__ == __${currentPage}__} ? 'active' : ''" aria-current="page">
+                                <a class="page-link" th:text="${i}"
+                                   th:href="${#mvc.url('upload-file-get').arg(0,__${i}__).build()}"> <span
+                                        class="sr-only">(current)</span></a>
+                            </li>
+
+                            <li class="page-item" th:classappend="${currentPage == totalPage ? 'disabled':''}">
+                                <a class="page-link" aria-label="Next" th:href="@{/excel-file(page=${currentPage+1})}"
+                                   th:aria-disabled="${currentPage == totalPage ? 'true':'false'}">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="message"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger btn-ok">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Assign</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="assignTo">Generated eCRF assign To: </label>
+                    <select id="assignTo" class="custom-select custom-select-sm">
+                        <option value="" selected>Select User</option>
+                        <option th:unless="${#lists.isEmpty(users)}"
+                                th:each="user: ${users}"
+                                th:value="${user.id}"
+                                th:text="${user.firstName}+' '+${user.surname}"
+                        ></option>
+                    </select>
+                    <small id="invalid-assigned-to" class="form-text text-muted"></small>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success btn-ok">Assign</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/modal.delete.js}"></script>
+</th:block>
+</body>
+</html>
